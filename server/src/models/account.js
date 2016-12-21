@@ -11,7 +11,7 @@ Account.statics.addAccount = function (email, name, hash) {
   account.email = email;
   account.name = name;
   account.password = hash;
-  return account.save();
+  return account.save();    // return account model
 };
 
 Account.statics.findAccountByEmail = function (email) {

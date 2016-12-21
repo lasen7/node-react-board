@@ -1,2 +1,4 @@
 PORT=3000
 DB_MONGO=mongodb://localhost/dbname
+SECRET_KEY=key
+JWT_KEY=key

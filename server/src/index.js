@@ -4,14 +4,40 @@ dotenv.config();
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import session from 'express-session';
+
 import mongoose from 'mongoose';
+import connectMongo from 'connect-mongo';
+
+import passport from 'passport';
+require('./passport');
 
 import api from './routes';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+const MongoStore = connectMongo(session);
+
+/* SETUP MIDDLEWARE */
+
 app.use(bodyParser.json());
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 14 * 24 * 60 * 60 * 1000  // 14 days
+  },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 14 * 24 * 60 * 60            // 14 days
+  })
+}));
+
+// using passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 // setup morgan
 if (process.env.NODE_ENV === 'development') {

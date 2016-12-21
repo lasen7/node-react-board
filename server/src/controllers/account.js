@@ -1,7 +1,7 @@
 import Account from '../models/account';
+import passport from 'passport';
 
 import { validateSignupBody, validateSigninBody } from '../utils/validation';
-import { generateHash, compareHash } from '../utils/bcrypt';
 
 /**
  * 회원가입
@@ -15,27 +15,20 @@ export const signup = (req, res, next) => {
     });
   }
 
-  Account.findAccountByEmail(req.body.email)
-    .then(account => {
-      if (account) {
-        let error = new Error();
-        error.message = 'The user already exists!';
-        error.code = 403;
-        error.errorCode = 1;
-        throw error;
-      } else {
-        return generateHash(req.body.password);
+  passport.authenticate('local-signup', (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+
+    // call serializeUser 
+    req.login(user, err => {
+      if (err) {
+        return next(err);
       }
-    })
-    .then(hash => {
-      return Account.addAccount(req.body.email, req.body.name, hash);
-    })
-    .then(doc => {
+
       res.send({ msg: 'Success' });
-    })
-    .catch(err => {
-      next(err);
     });
+  })(req, res, next);
 };
 
 /**
@@ -50,32 +43,33 @@ export const signin = (req, res, next) => {
     });
   }
 
-  Account.findAccountByEmail(req.body.email)
-    .then(account => {
-      if (!account) {
-        let error = new Error();
-        error.message = 'Invalid Auth';
-        error.code = 400;
-        throw error;
-      } else {
-        return compareHash(account.password, req.body.password);
+  passport.authenticate('local-signin', (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+
+    req.login(user, err => {
+      if (err) {
+        return next(err);
       }
-    })
-    .then(result => {
-      if (!result) {
-        let error = new Error();
-        error.message = 'Invalid Auth';
-        error.code = 400;
-        throw error;
-      } else {
-        res.send({ msg: 'Success' });
-      }
-    })
-    .catch(err => {
-      next(err);
+
+      res.send({ msg: 'Success' });
     });
+  })(req, res, next);
 };
 
 export const logout = (req, res, next) => {
-  res.send('ok');
+  req.logout();
+  res.send({ msg: 'Success' });
+};
+
+export const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    let error = new Error();
+    error.message = 'Unauthorized';
+    error.code = 401;
+    return next(error);
+  }
 };

@@ -23,7 +23,8 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "schema-inspector": "^1.6.8",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "uuid-validate": "0.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

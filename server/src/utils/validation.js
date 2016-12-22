@@ -1,5 +1,6 @@
 import inspector from 'schema-inspector';
 import mongoose from 'mongoose';
+import uuidValidate from 'uuid-validate';
 
 export const validateSignupBody = (body) => {
   const validation = {
@@ -91,10 +92,6 @@ export const validateAddEvent = (body) => {
   return inspector.validate(validation, body);
 };
 
-export const validateObjectId = (id) => {
-  return mongoose.Types.ObjectId.isValid(id);
-};
-
 export const validateEditProfile = (body) => {
   const validation = {
     type: 'object',
@@ -106,4 +103,12 @@ export const validateEditProfile = (body) => {
   };
 
   return inspector.validate(validation, body);
+};
+
+export const validateObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
+
+export const validateUUID = (uuid) => {
+  return uuidValidate(uuid);
 };

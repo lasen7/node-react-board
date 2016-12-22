@@ -14,4 +14,14 @@ Profile.statics.editProfile = function (eventId, name, token) {
   ).exec();
 };
 
+Profile.statics.getProfile = function (eventId, token) {
+  return this.findOne({
+    eventId: eventId,
+    token: token
+  }, {
+      name: 1,
+      _id: 0
+    }).exec();
+};
+
 export default mongoose.model('Profile', Profile);

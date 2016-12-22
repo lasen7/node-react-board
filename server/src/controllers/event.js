@@ -5,7 +5,8 @@ import {
   validateAddEvent,
   validateEventId,
   validateObjectId,
-  validateEditProfile
+  validateEditProfile,
+  validateUUID
 } from '../utils/validation';
 
 /**
@@ -31,15 +32,7 @@ export const addContent = (req, res, next) => {
     });
   }
 
-  const token = req.headers['x-access-token'];
-  if (!token) {
-    return res.status(400).send({
-      msg: 'Invalid Request',
-      code: 1
-    });
-  }
-
-  Event.addContent(req.params.eventId, req.body.name, req.body.content, token)
+  Event.addContent(req.params.eventId, req.body.name, req.body.content, req.token)
     .then(result => {
       if (result.nModified > 0) {
         res.send({ msg: 'Success' });
@@ -79,6 +72,7 @@ export const getContent = (req, res, next) => {
       let result = {};
       result.msg = 'Success';
       result.contents = docs.contents;
+      result.token = req.token;
       res.send(result);
     })
     .catch(error => {
@@ -103,14 +97,6 @@ export const likeContent = (req, res, next) => {
     });
   }
 
-  const token = req.headers['x-access-token'];
-  if (!token) {
-    return res.status(400).send({
-      msg: 'Invalid Request',
-      code: 1
-    });
-  }
-
   if (!req.query.q) {
     return res.status(400).send({
       msg: 'Invalid Request',
@@ -128,7 +114,7 @@ export const likeContent = (req, res, next) => {
     });
   }
 
-  Event.likeContent(req.params.eventId, req.params.contentId, token, req.query.q)
+  Event.likeContent(req.params.eventId, req.params.contentId, req.token, req.query.q)
     .then(result => {
       if (result.nModified > 0) {
         res.send({ msg: 'Success' });
@@ -164,15 +150,7 @@ export const editProfile = (req, res, next) => {
     });
   }
 
-  const token = req.headers['x-access-token'];
-  if (!token) {
-    return res.status(400).send({
-      msg: 'Invalid Request',
-      code: 1
-    });
-  }
-
-  Profile.editProfile(req.params.eventId, req.body.name, token)
+  Profile.editProfile(req.params.eventId, req.body.name, req.token)
     .then(result => {
       return Event.editWriter(req.params.eventId, req.body.name);
     })
@@ -186,4 +164,69 @@ export const editProfile = (req, res, next) => {
     .catch(error => {
       return next(error);
     });
+};
+
+/**
+ * 프로필 가져오기
+ * Params: { eventId }
+ * Header: { x-access-token }
+ */
+export const getProfile = (req, res, next) => {
+  req.params.eventId = (+req.params.eventId);
+
+  if (validateEventId({ eventId: req.params.eventId }).error.length > 0) {
+    return res.status(400).send({
+      msg: 'Invalid Request',
+      code: 0
+    });
+  }
+
+  Profile.getProfile(req.params.eventId, req.token)
+    .then(doc => {
+      let result = {};
+      result.msg = 'Success';
+      result.name = doc ? doc.name : '';
+      result.token = req.token;
+      res.send(result);
+    })
+    .catch(error => {
+      return next(error);
+    });
+};
+
+/**
+ * If token doesn't exist in the header, create token
+ */
+export const findAndCreateToken = (req, res, next) => {
+  const token = req.headers['x-access-token'];
+  if (!token) {
+    req.token = uuid();
+    return next();
+  }
+
+  if (!validateUUID(token)) {
+    let error = new Error();
+    error.message = 'The token is invalid';
+    error.code = 400;
+    return next(error);
+  }
+
+  req.token = token;
+  return next();
+};
+
+/**
+ * Middleware function to find token in header
+ */
+export const findToken = (req, res, next) => {
+  const token = req.headers['x-access-token'];
+  if (!token || !validateUUID(token)) {
+    let error = new Error();
+    error.message = 'The token is invalid';
+    error.code = 400;
+    return next(error);
+  }
+
+  req.token = token;
+  return next();
 };

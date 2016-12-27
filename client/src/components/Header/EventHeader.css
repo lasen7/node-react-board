@@ -1,0 +1,17 @@
+.side-header {
+  height: 7rem;
+}
+
+.container .wrapper {
+  display: table-cell;
+  vertical-align: middle;
+  height: 7rem;
+}
+
+.container .sub-title {
+  line-height: 1.5rem;
+}
+
+.side-nav li > a > i.material-icons {
+  margin-right: 1rem;
+}

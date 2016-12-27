@@ -1,0 +1,14 @@
+.container.Profile {
+  margin-top: 3.5rem;
+  position: relative;
+}
+
+.Profile-avatar {
+  width: 66px;
+  height: 66px;
+  position: absolute;
+  left: 50%;
+  margin-left: -33px;
+  z-index: 1;
+  top: -33px;
+}

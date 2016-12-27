@@ -6,7 +6,7 @@ class Home extends Component {
     return (
       <div>
         <Search />
-        <LoginLink to="/auth"/>
+        <LoginLink to="/auth" />
       </div>
     );
   }

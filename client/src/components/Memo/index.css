@@ -1,0 +1,25 @@
+.Title {
+  margin-bottom: 0.5rem;
+}
+
+.Right {
+  position: relative;
+  float: right;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.Count {
+  position: absolute;
+  right: 30px;
+  top: 3px;
+  color: grey;
+}
+
+.Star {
+  color: grey;
+}
+
+.Memo .row {
+  margin-bottom: 0;
+}

@@ -1,0 +1,16 @@
+.Header-logo {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+}
+
+input#search {
+  height: auto;
+}
+
+.input-field input[type=search]:focus {
+  background: #009688 !important;
+}
+
+.hidden {
+  display: none;
+}

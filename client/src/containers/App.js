@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Match, Miss } from 'react-router';
-import { Home, Auth, NotFound } from 'containers';
+import { Home, Auth, Event, NotFound, Events } from 'containers';
 
 class App extends Component {
   render() {
@@ -10,6 +10,8 @@ class App extends Component {
           <h2>App</h2>
           <Match exactly pattern="/" component={Home} />
           <Match pattern="/auth" component={Auth} />
+          <Match pattern="/event/:eventId" component={Event} />
+          <Match pattern="/events" component={Events} />
           <Miss component={NotFound} />
         </div>
       </Router>

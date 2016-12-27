@@ -1,0 +1,36 @@
+.Green {
+	color: #66bb6a;	
+}
+
+.Question {
+	position: absolute;
+	font-size: 1.5rem;
+	color: #9e9e9e;
+	margin-left: 0.5rem;
+	top: 0;
+	transform: translateY(50%);
+}
+
+.User {
+	font-size: 1rem;	
+}
+
+.Circle {
+	border: 1px solid #9e9e9e;
+	border-radius: 100% 100%;
+	background: #e0e0e0;
+	padding: 0.5rem 0.5rem;
+}
+
+input.Write-name {
+	margin-left: 1rem;
+	width: calc(100% - 3.2rem);
+}
+
+.modal .modal-content {
+	padding-bottom: 0;
+}
+
+.container.Write {
+	margin-top: 1rem;
+}

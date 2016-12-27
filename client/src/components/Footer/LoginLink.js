@@ -4,10 +4,12 @@ import './LoginLink.css';
 
 const LoginLink = ({to}) => {
   return (
-    <div className="footer">
-      <div className="row">
-        <Link className="bottom" to={to}>Login as admin</Link> 
-      </div>      
+    <div>
+      <div className="footer">
+        <div className="row">
+          <Link className="bottom" to={to}>Login as admin</Link>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="index.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+	<title>React App</title>
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="card">
+				<a href="#">
+					<div class="card-content"> <i class="material-icons Green">question_answer</i> <span class="Question">Type your question</span> </div>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+<!-- Modal Trigger -->
+  <a class="waves-effect waves-light btn" href="#modal1">Modal</a>
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+	
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+	<script>
+$(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+  });
+	</script>
+</body>
+
+</html>

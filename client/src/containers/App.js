@@ -7,7 +7,6 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <h2>App</h2>
           <Match exactly pattern="/" component={Home} />
           <Match pattern="/auth" component={Auth} />
           <Match pattern="/event/:eventId" component={Event} />

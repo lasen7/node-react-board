@@ -4,7 +4,7 @@ import './index.css';
 
 const MemoList = () => {
   return (
-    <div className="MemoList">
+    <div className="container MemoList">
       <Memo />
       <Memo />
       <Memo />

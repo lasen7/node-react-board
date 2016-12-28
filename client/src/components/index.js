@@ -10,6 +10,10 @@ import EventsHeader from './Header/EventsHeader';
 import FloatingButton from './FloatingButton';
 import Profile from './Profile';
 import Ask from './Ask';
+import Event from './Event/Event';
+import Create from './Event/Create';
+import EventList from './EventList';
+import HomeWrapper from './HomeWrapper';
 
 export {
   Login,
@@ -23,5 +27,9 @@ export {
   EventsHeader,
   FloatingButton,
   Profile,
-  Ask
+  Ask,
+  Event,
+  Create,
+  EventList,
+  HomeWrapper
 };

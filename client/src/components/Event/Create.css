@@ -1,0 +1,25 @@
+#Event-create {
+  margin-left: 1rem;
+  margin-bottom: 0;
+  border: 0;
+  margin-right: 1rem;
+  flex-shrink: 3;
+}
+
+#Event-create:not(:focus) {
+  cursor: pointer;
+}
+
+.Event label {
+  cursor: pointer;
+}
+
+.Event .Wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.Event .card-content {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}

@@ -3,7 +3,7 @@ import './index.css';
 
 const Memo = () => {
   return (
-    <div className="container Memo">
+    <div className="Memo">
       <div className="row">        
         <div className="card">
           <div className="card-content">

@@ -8,6 +8,9 @@ class Auth extends Component {
 
     return (
       <div>
+        <div className="center">
+          <a href="/"><h3>Home</h3></a>
+        </div>
         <Match exactly pattern={pathname} component={Login} />
         <Match pattern={`${pathname}/login`} component={Login} />
         <Match exactly pattern={`${pathname}/register`} component={Register} />

@@ -9,7 +9,7 @@ class Search extends Component {
         <nav id="searchNav">
           <div className="nav-wrapper">
             <form>
-              <div className="input-field">
+              <div className="input-field teal">
                 <input id="search" type="search" required placeholder="Enter code here" />
                 <label><i className="material-icons">search</i></label> <i className="material-icons">close</i> </div>
             </form>

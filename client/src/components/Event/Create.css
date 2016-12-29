@@ -1,12 +1,12 @@
-#Event-create {
+.Event .Event-create {
   margin-left: 1rem;
   margin-bottom: 0;
   border: 0;
   margin-right: 1rem;
-  flex-shrink: 3;
+  flex-shrink: 4;
 }
 
-#Event-create:not(:focus) {
+.Event .Event-create:not(:focus) {
   cursor: pointer;
 }
 

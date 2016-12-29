@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { HomeWrapper, Search, LoginLink } from 'components';
+import { HomeWrapper } from 'components';
 
 class Home extends Component {
+
   render() {
     return (
-        <HomeWrapper />
-
-      //   <Search />
-      //   <LoginLink to="/auth" />
-      // </HomeWrapper>
+      <HomeWrapper />
     );
   }
 }

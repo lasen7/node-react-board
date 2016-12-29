@@ -8,15 +8,18 @@ export const validateSignupBody = (body) => {
     properties: {
       name: {
         type: 'string',
-        pattern: /^[0-9a-z_]{4,20}$/
-      },
-      password: {
-        type: 'string',
-        minLength: 5
+        pattern: /^[0-9a-z_]{4,20}$/,
+        code: 1
       },
       email: {
         type: 'string',
-        pattern: 'email'
+        pattern: 'email',
+        code: 2
+      },
+      password: {
+        type: 'string',
+        minLength: 5,
+        code: 3
       }
     }
   };
@@ -28,14 +31,16 @@ export const validateSigninBody = (body) => {
   const validation = {
     type: 'object',
     properties: {
-      password: {
-        type: 'string',
-        minLength: 5
-      },
       email: {
         type: 'string',
-        pattern: 'email'
-      }
+        pattern: 'email',
+        code: 1
+      },
+      password: {
+        type: 'string',
+        minLength: 5,
+        code: 2
+      },
     }
   };
 
@@ -48,12 +53,14 @@ export const validateAddEvents = (body) => {
     properties: {
       eventName: {
         type: 'string',
-        pattern: /^[0-9a-z_]{4,20}$/
+        // pattern: /^[0-9a-z_]{4,20}$/,
+        code: 1
       },
       eventId: {
         type: 'number',
         gte: 1000,
-        lte: 99999
+        lte: 99999,
+        code: 2
       }
     }
   };

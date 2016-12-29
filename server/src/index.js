@@ -5,6 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import session from 'express-session';
+import path from 'path';
 
 import mongoose from 'mongoose';
 import connectMongo from 'connect-mongo';
@@ -44,13 +45,16 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+// SERVE STATIC FILES
+app.use('/', express.static(path.join(__dirname, '../../client/build/')));
+
 // setup router
 app.use('/api', api);
 
 // Not found
-app.use((req, res, next) => {
-  res.status(404).send('Not found page');
-});
+// app.use((req, res, next) => {
+//   res.status(404).send('Not found page');
+// });
 
 // handle error
 app.use((err, req, res, next) => {

@@ -6,7 +6,7 @@ const Profile = () => {
     <div className="container Profile">
 
       <div className="Profile-avatar">
-        <img src="https://dwmr9z5ou2pfk.cloudfront.net/master/8bba6ed53becc627246d68d7277ec66a.svg" />
+        <img role="presentation" src="https://dwmr9z5ou2pfk.cloudfront.net/master/8bba6ed53becc627246d68d7277ec66a.svg"/>
       </div>
 
       <div className="row">

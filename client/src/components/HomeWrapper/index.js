@@ -6,7 +6,7 @@ const HomeWrapper = () => {
   return (
     <div className="HomeWrapper">
       <Search />
-      <LoginLink to="/auth" />
+      <LoginLink to="/auth/login" />
     </div>
   );
 };

@@ -4,12 +4,19 @@ import { validateAddEvents, validateEventId } from '../utils/validation';
 /**
  * 이벤트 생성
  * Body: { eventName, eventId }
+ * Error:
+ *  - 1: invalid event name
+ *  - 2: invalid event id
+ *  - 3: duplicated event id
  */
 export const addEvents = (req, res, next) => {
-  if (validateAddEvents(req.body).error.length > 0) {
+  req.body.eventId = (+req.body.eventId);
+
+  const validate = validateAddEvents(req.body);
+  if (validate.error.length > 0) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 0
+      code: validate.error[0].code
     });
   }
 
@@ -19,6 +26,7 @@ export const addEvents = (req, res, next) => {
         let error = new Error();
         error.message = 'The eventId already exists!';
         error.code = 403;
+        error.errorCode = 3;
         throw error;
       } else {
         return Event.addEvent(req.body.eventId, req.body.eventName, req.user.email);

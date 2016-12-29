@@ -8,10 +8,11 @@ import { validateSignupBody, validateSigninBody } from '../utils/validation';
  * Body: { name, email, password }
  */
 export const signup = (req, res, next) => {
-  if (validateSignupBody(req.body).error.length > 0) {
+  const validate = validateSignupBody(req.body);
+  if (validate.error.length > 0) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 0
+      code: validate.error[0].code
     });
   }
 
@@ -21,13 +22,15 @@ export const signup = (req, res, next) => {
     }
 
     // call serializeUser 
-    req.login(user, err => {
-      if (err) {
-        return next(err);
-      }
+    // req.login(user, err => {
+    //   if (err) {
+    //     return next(err);
+    //   }
 
-      res.send({ msg: 'Success' });
-    });
+    //   res.send({ msg: 'Success' });
+    // });
+
+    res.send({ msg: 'Success' });
   })(req, res, next);
 };
 
@@ -36,10 +39,11 @@ export const signup = (req, res, next) => {
  * Body: { email, password }
  */
 export const signin = (req, res, next) => {
-  if (validateSigninBody(req.body).error.length > 0) {
+  const validate = validateSigninBody(req.body);
+  if (validate.error.length > 0) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 0
+      //code: validate.error[0].code
     });
   }
 
@@ -53,7 +57,7 @@ export const signin = (req, res, next) => {
         return next(err);
       }
 
-      res.send({ msg: 'Success' });
+      res.send({ msg: 'Success', name: user.name });
     });
   })(req, res, next);
 };
@@ -72,4 +76,11 @@ export const isAuthenticated = (req, res, next) => {
     error.code = 401;
     return next(error);
   }
+};
+
+/**
+ * 세션 확인
+ */
+export const getStatus = (req, res, next) => {
+  res.send({ status: req.user });
 };

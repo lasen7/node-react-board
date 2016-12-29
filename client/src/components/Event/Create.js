@@ -1,20 +1,89 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Create.css';
 
-const Create = () => {
-  return (
-    <div className="row Event">
-      <div className="card">
-        <div className="card-content">
-          <div className="Wrapper">
-            <label htmlFor="Event-create"><i className="material-icons">add</i></label>
-            <input id="Event-create" type="text" placeholder="Create new event" />
-            <a className="waves-effect waves-light btn">Add</a>
+const propTypes = {
+  onCreateEvents: React.PropTypes.func,
+};
+
+const defaultProps = {
+  onCreateEvents: (id, pw) => { console.error('onCreateEvents function not defined'); },
+};
+
+class Create extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      eventName: '',
+      eventId: ''
+    };
+  }
+
+  handleChange = (e) => {
+    let nextState = {};
+    nextState[e.target.name] = e.target.value;
+    this.setState(nextState);
+  }
+
+  handleCreateEvents = () => {
+    const eventName = this.state.eventName;
+    const eventId = this.state.eventId;
+
+    this.props.onCreateEvents(eventName, eventId)
+      .then(result => {
+        if (result === -1) {
+          this.setState({
+            eventName: '',
+            eventId: ''
+          });
+        } else if (result === 1) {
+          this.eventNameInput.focus();
+        } else if (result === 2 || result === 3) {
+          this.eventIdInput.focus();
+        }
+      })
+  }
+
+  render() {
+    return (
+      <div className="row Event">
+        <div className="card">
+          <div className="card-content">
+            <div className="Wrapper">
+              <label htmlFor="eventName"><i className="material-icons">add</i></label>
+              <input
+                id="eventName"
+                className="Event-create"
+                name="eventName"
+                type="text"
+                placeholder="Create new event"
+                value={this.state.eventName}
+                onChange={this.handleChange}
+                ref={(input) => { this.eventNameInput = input } }
+                />
+              <input
+                className="Event-create"
+                name="eventId"
+                type="text"
+                placeholder="Input event id"
+                value={this.state.eventId}
+                onChange={this.handleChange}
+                ref={(input) => { this.eventIdInput = input } }
+                />
+              <a
+                className="waves-effect waves-light btn"
+                onClick={this.handleCreateEvents}
+                >add</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
+
+Create.propTypes = propTypes;
+Create.defaultProps = defaultProps;
 
 export default Create;

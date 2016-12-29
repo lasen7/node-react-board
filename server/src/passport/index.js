@@ -29,7 +29,7 @@ passport.use(
             let error = new Error();
             error.message = 'The user already exists!';
             error.code = 403;
-            error.errorCode = 1;
+            error.errorCode = 4;
             throw error;
           } else {
             return generateHash(password);

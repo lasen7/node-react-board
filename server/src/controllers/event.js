@@ -1,6 +1,7 @@
 import Event from '../models/event';
 import Profile from '../models/profile';
 import uuid from 'uuid/v1';
+import mongoose from 'mongoose';
 import {
   validateAddEvent,
   validateEventId,
@@ -13,12 +14,16 @@ import {
  * 게시판 글 작성
  * Header: { x-access-token }
  * Body: { name, content } 
+ * Error:
+ *   1: Invalid token
+ *   2: Content empty
+ *   3: Invalid eventId 
  */
 export const addContent = (req, res, next) => {
   if (validateAddEvent(req.body).error.length > 0) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 0
+      code: 2
     });
   }
 
@@ -28,7 +33,7 @@ export const addContent = (req, res, next) => {
   if (validateEventId({ eventId: req.params.eventId }).error.length > 0) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 0
+      code: 3
     });
   }
 
@@ -71,7 +76,58 @@ export const getContent = (req, res, next) => {
 
       let result = {};
       result.msg = 'Success';
-      result.contents = docs.contents;
+      result.eventName = docs.eventName,
+        result.contents = docs.contents;
+      result.token = req.token;
+      res.send(result);
+    })
+    .catch(error => {
+      return next(error);
+    });
+};
+
+/**
+ * 게시판 새글 가져오기
+ * Params: { eventId, contentId }
+ */
+export const getNewContent = (req, res, next) => {
+  // parse int
+  req.params.eventId = (+req.params.eventId);
+
+  if (validateEventId({ eventId: req.params.eventId }).error.length > 0) {
+    return res.status(400).send({
+      msg: 'Invalid Request',
+      code: 0
+    });
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.contentId)) {
+    return res.status(400).send({
+      msg: 'Invalid Request',
+      code: 0
+    });
+  }
+
+  Event.getNewContents(req.params.eventId, req.params.contentId)
+    .then(docs => {
+      if (!docs || docs.length === 0) {
+        return res.status(403).send({
+          msg: 'Not found event',
+          code: 1
+        });
+      }
+
+      console.log(docs);
+
+      let result = {};
+      result.msg = 'Success';
+      result.eventName = docs[0].eventName;
+      result.contents = [];
+
+      for (let doc of docs) {
+        result.contents.push(doc.contents);
+      }
+
       result.token = req.token;
       res.send(result);
     })
@@ -224,6 +280,7 @@ export const findToken = (req, res, next) => {
     let error = new Error();
     error.message = 'The token is invalid';
     error.code = 400;
+    error.errorCode = 1;
     return next(error);
   }
 

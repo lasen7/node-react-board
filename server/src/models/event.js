@@ -38,7 +38,9 @@ Event.statics.findEventsByEmail = function (email) {
     eventId: 1,
     eventName: 1,
     date: 1
-  }).exec();
+  })
+    .sort({ date: -1 })
+    .exec();
 };
 
 Event.statics.findEventsByQuery = function (email, query) {
@@ -87,9 +89,21 @@ Event.statics.getContents = function (eventId) {
     { eventId: eventId },
     {
       contents: 1,
+      eventName: 1,
       _id: 0
     })
     .exec();
+};
+
+Event.statics.getNewContents = function (eventId, contentId) {
+  contentId = new mongoose.Types.ObjectId(contentId);
+
+  return this.aggregate([
+    { $match: { eventId: eventId } },
+    { $unwind: '$contents' },
+    { $match: { 'contents._id': { $gt: contentId } } },
+    { $project: { 'contents': 1, eventName: 1, _id: 0 } }
+  ]).exec();
 };
 
 Event.statics.likeContent = function (eventId, contentId, token, isLike) {

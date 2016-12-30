@@ -91,7 +91,8 @@ export const validateAddEvent = (body) => {
         type: 'string',
       },
       content: {
-        type: 'string'
+        type: 'string',
+        pattern: /\S+/
       }
     }
   };

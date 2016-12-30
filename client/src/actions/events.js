@@ -66,3 +66,36 @@ export const listEventsFailure = () => {
     type: EVENTS.EVENTS_LIST_FAILURE
   }
 };
+
+export const removeEvents = (index, params) => {
+  return (dispatch) => {
+    dispatch(beginRemoveEvents());
+
+    return service.removeEvents(params)
+      .then(response => {
+        dispatch(removeEventsSuccess(index));
+      })
+      .catch(err => {
+        dispatch(removeEventsFailure());
+      });
+  }
+};
+
+export const beginRemoveEvents = () => {
+  return {
+    type: EVENTS.EVENTS_REMOVE
+  }
+};
+
+export const removeEventsSuccess = (index) => {
+  return {
+    type: EVENTS.EVENTS_REMOVE_SUCCESS,
+    index
+  }
+};
+
+export const removeEventsFailure = () => {
+  return {
+    type: EVENTS.EVENTS_REMOVE_FAILURE
+  }
+};

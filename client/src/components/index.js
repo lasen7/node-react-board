@@ -14,6 +14,7 @@ import Event from './Event/Event';
 import Create from './Event/Create';
 import EventList from './EventList';
 import HomeWrapper from './HomeWrapper';
+import Spinner from './Spinner';
 
 export {
   Login,
@@ -31,5 +32,6 @@ export {
   Event,
   Create,
   EventList,
-  HomeWrapper
+  HomeWrapper,
+  Spinner
 };

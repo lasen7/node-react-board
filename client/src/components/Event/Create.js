@@ -20,6 +20,12 @@ class Create extends Component {
     };
   }
 
+  handleKeyPress = (e) => {
+    if (e.charCode === 13) {
+      this.handleCreateEvents();
+    }
+  }
+
   handleChange = (e) => {
     let nextState = {};
     nextState[e.target.name] = e.target.value;
@@ -70,6 +76,7 @@ class Create extends Component {
                 value={this.state.eventId}
                 onChange={this.handleChange}
                 ref={(input) => { this.eventIdInput = input } }
+                onKeyPress={this.handleKeyPress}
                 />
               <a
                 className="waves-effect waves-light btn"

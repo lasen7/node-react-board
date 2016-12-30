@@ -8,6 +8,9 @@ const initialState = {
   list: {
     status: 'INIT',
     data: []
+  },
+  remove: {
+    status: 'INIT'
   }
 };
 
@@ -61,6 +64,37 @@ function events(state = initialState, action) {
         ...state,
         list: {
           ...state.list,
+          status: 'FAILURE'
+        }
+      }
+    case EVENTS.EVENTS_REMOVE:
+      return {
+        ...state,
+        remove: {
+          ...state.remove,
+          status: 'WAITING'
+        }
+      }
+    case EVENTS.EVENTS_REMOVE_SUCCESS:
+      return {
+        ...state,
+        remove: {
+          ...state.remove,
+          status: 'SUCCESS'
+        },
+        list: {
+          ...state.list,
+          data: [
+            ...state.list.data.slice(0, action.index),
+            ...state.list.data.slice(action.index + 1)
+          ]
+        }
+      }
+    case EVENTS.EVENTS_REMOVE_FAILURE:
+      return {
+        ...state,
+        remove: {
+          ...state.remove,
           status: 'FAILURE'
         }
       }

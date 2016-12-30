@@ -20,3 +20,15 @@ export const listEvents = () => {
     method: 'get'
   });
 };
+
+export const removeEvents = ({
+  eventId
+}) => {
+  return request({
+    url: '/api/events',
+    method: 'delete',
+    data: {
+      eventId
+    }
+  });
+};

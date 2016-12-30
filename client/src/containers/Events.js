@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EventsHeader, EventList } from 'components';
+import { EventsHeader, EventList, Spinner } from 'components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -32,12 +32,19 @@ class Events extends Component {
       });
   }
 
+  handleRemoveEvents = (index, eventId) => {
+    this.props.actions.removeEvents(index, { eventId })
+      .then(() => {
+        alert.success('Event deleted!');
+      });
+  }
+
   handleCreateEvents = (eventName, eventId) => {
     return this.props.actions.createEvents({ eventName, eventId })
       .then(() => {
         if (this.props.createStatus.status === 'SUCCESS') {
-          // TODO: fetch events
-          alert.success('ok');
+          alert.success('The new event has been created!');
+          this.props.actions.listEvents();
           return -1;
         } else {
           /*
@@ -59,16 +66,23 @@ class Events extends Component {
   }
 
   render() {
+
+    const spinner = (<Spinner />);
+    const eventList = (
+      <EventList
+        onCreateEvents={this.handleCreateEvents}
+        onRemoveEvents={this.handleRemoveEvents}
+        data={this.props.listStatus.data}
+        />
+    );
+
     return (
       <div>
         <EventsHeader
           name={this.props.status.name}
           onLogout={this.handleLogout}
           />
-        <EventList
-          onCreateEvents={this.handleCreateEvents}
-          data={this.props.listStatus.data}
-          />
+        {this.props.listStatus.status === 'WAITING' ? spinner : eventList}
       </div>
     );
   }
@@ -79,6 +93,7 @@ Events = connect(state => {
     status: state.auth.status,
     createStatus: state.events.create,
     listStatus: state.events.list,
+    removeStatus: state.events.remove
   }
 }, dispatch => {
   return {
@@ -87,6 +102,7 @@ Events = connect(state => {
       logout: auth.logout,
       createEvents: events.createEvents,
       listEvents: events.listEvents,
+      removeEvents: events.removeEvents
     }, dispatch)
   }
 })(Events);

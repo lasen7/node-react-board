@@ -4,11 +4,13 @@ import { Event, Create } from 'components';
 
 const propTypes = {
   onCreateEvents: React.PropTypes.func,
+  onRemoveEvents: React.PropTypes.func,
   data: React.PropTypes.array,
 };
 
 const defaultProps = {
   onCreateEvents: (id, pw) => { console.error('onCreateEvents function not defined'); },
+  onRemoveEvents: (id, pw) => { console.error('onRemoveEvents function not defined'); },
   data: [],
 };
 
@@ -22,6 +24,7 @@ class EventList extends Component {
           data={event}
           key={event.eventId}
           index={index}
+          onRemoveEvents={this.props.onRemoveEvents}
           />
       )
     );

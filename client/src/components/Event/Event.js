@@ -4,11 +4,15 @@ import React, { Component } from 'react';
 import './Event.css';
 
 const propTypes = {
-  data: React.PropTypes.object
+  data: React.PropTypes.object,
+  onRemoveEvents: React.PropTypes.func,
+  index: React.PropTypes.number,
 };
 
 const defaultProps = {
-  data: {}
+  data: {},
+  onRemoveEvents: (id, pw) => { console.error('onRemoveEvents function not defined'); },
+  index: -1
 };
 
 //const Event = ({data}) => {
@@ -18,8 +22,15 @@ class Event extends Component {
     $(".dropdown-button").dropdown();
   }
 
+  handleRemove = () => {
+    const {eventId} = this.props.data;
+    const {index} = this.props;
+
+    this.props.onRemoveEvents(index, eventId);
+  }
+
   render() {
-    const {eventName, eventId, date, index} = this.props.data;
+    const {eventName, eventId, date} = this.props.data;
 
     return (
       <div className="row Event">
@@ -31,7 +42,7 @@ class Event extends Component {
               <div className="Right">
                 <a className='dropdown-button' href='#' data-beloworigin="true" data-activates={`dropdown-${eventId}`}><i className="material-icons">menu</i></a>
                 <ul id={`dropdown-${eventId}`} className='dropdown-content'>
-                  <li><a href="#!">Delete</a></li>
+                  <li><a onClick={this.handleRemove}>Delete</a></li>
                 </ul>
               </div>
 

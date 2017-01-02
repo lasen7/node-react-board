@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Memo } from 'components';
 import './index.css';
 
-//const MemoList = ({data}) => {
 class MemoList extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -11,25 +10,28 @@ class MemoList extends Component {
   }
 
   render() {
+    let data = this.props.data;
+
     // sorting
-    let {data} = this.props;
     data = data.sort((a, b) => {
       return new Date(b.date) - new Date(a.date);
     });
 
     // map data to components
-    const memotList = data.map(
+    const memoList = data.map(
       (memo, index) => (
         <Memo
           data={memo}
-          index={index}
           key={memo._id}
+          index={index}
+          onLikeEvent={this.props.onLikeEvent}
+          token={this.props.token}
           />
       ));
 
     return (
       <div className="container MemoList">
-        {memotList}
+        {memoList}
       </div>
     );
   }

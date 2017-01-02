@@ -22,7 +22,7 @@ class Event extends Component {
     const loadMemoLoop = () => {
       this.loadNewMemo()
         .then(() => {
-          this.memoLoaderTimeoutId = setTimeout(loadMemoLoop, 5000);
+          //this.memoLoaderTimeoutId = setTimeout(loadMemoLoop, 10000);
         })
     };
 
@@ -45,19 +45,22 @@ class Event extends Component {
   }
 
   loadNewMemo = () => {
+    console.log('timer');
+
     if (this.props.listStatus.status === 'WAITING') {
       return new Promise((resolve, reject) => {
         resolve();
       });
     }
+    const {params} = this.props;
 
     if (this.props.listStatus.data.length === 0) {
       return this.props.actions.listEvent({ eventId: params.eventId });
     }
 
-    const {params} = this.props;
-    const contentId = this.props.listStatus.data[this.props.listStatus.data.length - 1]._id;
-    
+    //const contentId = this.props.listStatus.data[this.props.listStatus.data.length - 1]._id;
+    const contentId = this.props.listStatus.data[0]._id;
+
     return this.props.actions.listNewEvent({ eventId: params.eventId, contentId });
   }
 
@@ -74,7 +77,8 @@ class Event extends Component {
     return this.props.actions.createEvent({ name, content, eventId, token })
       .then(() => {
         if (this.props.createStatus.status === 'SUCCESS') {
-          this.props.actions.listEvent({ eventId: eventId });
+          //this.props.actions.listEvent({ eventId: eventId });
+          this.loadNewMemo();
           return true;
         } else {
           /*
@@ -108,16 +112,45 @@ class Event extends Component {
       });
   }
 
+  handleLikeEvent = (contentId, isLike, index) => {
+    const eventId = this.props.params.eventId;
+    const key = `${keyPrefix}${eventId}${keySuffix}`;
+    const token = storage.get(key);
+
+    this.props.actions.likeEvent({ eventId, contentId, token, isLike, index })
+      .then(() => {
+        if (this.props.starStatus.status === 'SUCCESS') {
+          if (isLike) {
+            alert.success('LIKE!');
+          } else {
+            alert.error('UNLIKE!');
+          }
+
+        } else {
+          alert.error('Error! Please retry again!');
+          setTimeout(() => {
+            location.reload();
+          }, 500);
+        }
+      });
+  }
+
   render() {
     const {params, location} = this.props;
     const re = /ask/;
     const isAsk = re.test(location.pathname);
 
+    const eventId = this.props.params.eventId;
+    const key = `${keyPrefix}${eventId}${keySuffix}`;
+    const token = storage.get(key);
+
     const askView = (
       <Ask
         fetching={this.props.listStatus.status === 'WAITING'}
         onCreateEvent={this.handleCreateEvent}
+        onLikeEvent={this.handleLikeEvent}
         data={this.props.listStatus.data}
+        token={token}
         />);
     const profileView = (<Profile />);
 
@@ -136,6 +169,7 @@ Event = connect(state => {
   return {
     createStatus: state.event.create,
     listStatus: state.event.list,
+    starStatus: state.event.star,
   }
 }, dispatch => {
   return {
@@ -143,6 +177,7 @@ Event = connect(state => {
       createEvent: event.createEvent,
       listEvent: event.listEvent,
       listNewEvent: event.listNewEvent,
+      likeEvent: event.likeEvent
     }, dispatch)
   }
 })(Event);

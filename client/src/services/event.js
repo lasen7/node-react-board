@@ -33,7 +33,22 @@ export const listNewEvent = ({
   contentId
 }) => {
   return request({
-    url: '/api/event/' + eventId + '/new/' + contentId,
+    url: `/api/event/${eventId}/new/${contentId}`,
     method: 'get'
+  });
+};
+
+export const likeEvent = ({
+  eventId,
+  contentId,
+  token,
+  isLike
+}) => {
+  return request({
+    url: `/api/event/${eventId}/like/${contentId}?q=${isLike ? 'like' : 'unlike'}`,
+    method: 'put',
+    config: {
+      headers: { 'x-access-token': token }
+    }
   });
 };

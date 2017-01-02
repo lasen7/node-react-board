@@ -1,10 +1,15 @@
 import React from 'react';
 import { Write, MemoList, FloatingButton, Spinner } from 'components';
 
-const Ask = ({onCreateEvent, fetching, data}) => {
+const Ask = ({onCreateEvent, onLikeEvent, fetching, data, token}) => {
 
   // const spinner = (<Spinner />);
-  const memoList = (<MemoList data={data} />);
+  const memoList = (
+    <MemoList
+      data={data}
+      onLikeEvent={onLikeEvent}
+      token={token}
+      />);
 
   return (
     <div>

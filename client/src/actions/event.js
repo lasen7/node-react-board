@@ -89,3 +89,39 @@ export const listNewEvent = (params) => {
       });
   }
 };
+
+export const likeEvent = (params) => {
+  return (dispatch) => {
+    dispatch(beginLikeEvent());
+
+    return service.likeEvent(params)
+      .then(response => {
+        dispatch(likeEventSuccess(params.token, params.isLike, params.index));
+      })
+      .catch(error => {
+        dispatch(likeEventFailure(error.response.data.code));
+      });
+  }
+};
+
+export const beginLikeEvent = () => {
+  return {
+    type: EVENT.EVENT_LIKE
+  }
+};
+
+export const likeEventSuccess = (token, isLike, index) => {
+  return {
+    type: EVENT.EVENT_LIKE_SUCCESS,
+    token,
+    isLike,
+    index
+  }
+};
+
+export const likeEventFailure = (error) => {
+  return {
+    type: EVENT.EVENT_LIKE_FAILURE,
+    error
+  }
+};

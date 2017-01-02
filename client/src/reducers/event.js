@@ -11,6 +11,10 @@ const initialState = {
     eventName: '',
     token: '',
     error: -1
+  },
+  star: {
+    status: 'INIT',
+    error: -1
   }
 };
 
@@ -70,6 +74,59 @@ function event(state = initialState, action) {
         ...state,
         list: {
           ...state.list,
+          status: 'FAILURE',
+          error: action.error
+        }
+      }
+    case EVENT.EVENT_LIKE:
+      return {
+        ...state,
+        star: {
+          ...state.star,
+          status: 'WAITING',
+          error: -1
+        }
+      }
+    case EVENT.EVENT_LIKE_SUCCESS:
+      debugger
+      let data = {
+        ...state.list.data[action.index]
+      };
+
+      let copyData = JSON.parse(JSON.stringify(data));
+
+      if (action.isLike) {
+        copyData.like.push(action.token);
+      } else {
+        let index = copyData.like.indexOf(action.token);
+        if (index >= 0) {
+          copyData.like.splice(index, 1);
+        }
+      }
+
+      if (copyData.token !== action.token) {
+        copyData.token = action.token;
+      }
+
+      return {
+        ...state,
+        star: {
+          ...state.star,
+          status: 'SUCCESS',
+        },
+        list: {
+          data: [
+            ...state.list.data.slice(0, action.index),
+            copyData,
+            ...state.list.data.slice(action.index + 1)
+          ]
+        }
+      }
+    case EVENT.EVENT_LIKE_FAILURE:
+      return {
+        ...state,
+        star: {
+          ...state.star,
           status: 'FAILURE',
           error: action.error
         }

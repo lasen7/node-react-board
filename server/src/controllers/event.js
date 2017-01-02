@@ -117,8 +117,6 @@ export const getNewContent = (req, res, next) => {
         });
       }
 
-      console.log(docs);
-
       let result = {};
       result.msg = 'Success';
       result.eventName = docs[0].eventName;
@@ -141,6 +139,11 @@ export const getNewContent = (req, res, next) => {
  * Params: { eventId, contentId }
  * Header: { x-access-token }
  * QueryString: { req.query.q: like/unlike }
+ * Error:
+ *  1. Invalid token
+ *  2. Invalid event id
+ *  3. Invalid query string
+ *  4. Invalid object id of content id
  */
 export const likeContent = (req, res, next) => {
   // parse int
@@ -149,14 +152,14 @@ export const likeContent = (req, res, next) => {
   if (validateEventId({ eventId: req.params.eventId }).error.length > 0) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 0
+      code: 2
     });
   }
 
   if (!req.query.q) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 0
+      code: 3
     });
   } else {
     req.query.q = (req.query.q == 'like') ? true : false;
@@ -166,7 +169,7 @@ export const likeContent = (req, res, next) => {
   if (!validateObjectId(req.params.contentId)) {
     return res.status(400).send({
       msg: 'Invalid Request',
-      code: 1
+      code: 4
     });
   }
 

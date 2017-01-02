@@ -12,9 +12,16 @@ const initialState = {
     token: '',
     error: -1
   },
-  star: {
+  like: {
     status: 'INIT',
     error: -1
+  },
+  profile: {
+    status: 'INIT',
+    name: ''
+  },
+  editProfile: {
+    status: 'INIT'
   }
 };
 
@@ -56,15 +63,22 @@ function event(state = initialState, action) {
         }
       }
     case EVENT.EVENT_LIST_SUCCESS:
+      let data = [
+        ...state.list.data,
+        ...action.data
+      ];
+
+      // sorting
+      data = data.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+
       return {
         ...state,
         list: {
           ...state.list,
           status: 'SUCCESS',
-          data: [
-            ...state.list.data,
-            ...action.data
-          ],
+          data: data,
           token: action.token,
           eventName: action.eventName
         }
@@ -81,19 +95,18 @@ function event(state = initialState, action) {
     case EVENT.EVENT_LIKE:
       return {
         ...state,
-        star: {
-          ...state.star,
+        like: {
+          ...state.like,
           status: 'WAITING',
           error: -1
         }
       }
     case EVENT.EVENT_LIKE_SUCCESS:
-      debugger
-      let data = {
+      let originData = {
         ...state.list.data[action.index]
       };
 
-      let copyData = JSON.parse(JSON.stringify(data));
+      let copyData = JSON.parse(JSON.stringify(originData));
 
       if (action.isLike) {
         copyData.like.push(action.token);
@@ -110,8 +123,8 @@ function event(state = initialState, action) {
 
       return {
         ...state,
-        star: {
-          ...state.star,
+        like: {
+          ...state.like,
           status: 'SUCCESS',
         },
         list: {
@@ -125,10 +138,63 @@ function event(state = initialState, action) {
     case EVENT.EVENT_LIKE_FAILURE:
       return {
         ...state,
-        star: {
-          ...state.star,
+        like: {
+          ...state.like,
           status: 'FAILURE',
           error: action.error
+        }
+      }
+    case EVENT.EVENT_PROFILE:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          status: 'WAITING'
+        }
+      }
+    case EVENT.EVENT_PROFILE_SUCCESS:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          status: 'SUCCESS',
+          name: action.name
+        }
+      }
+    case EVENT.EVENT_PROFILE_FAILURE:
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          status: 'FAILURE'
+        }
+      }
+    case EVENT.EVENT_EDIT_PROFILE:
+      return {
+        ...state,
+        editProfile: {
+          ...state.editProfile,
+          status: 'WAITING'
+        }
+      }
+    case EVENT.EVENT_EDIT_PROFILE_SUCCESS:
+      return {
+        ...state,
+        editProfile: {
+          ...state.editProfile,
+          status: 'SUCCESS'
+        },
+        profile: {
+          ...state.profile,
+          name: action.name
+        }
+      }
+    case EVENT.EVENT_EDIT_PROFILE_FAILURE:
+      return {
+        ...state,
+        editProfile: {
+          ...state.editProfile,
+          status: 'FAILURE'
         }
       }
     default:

@@ -4,11 +4,13 @@ import React, { Component } from 'react';
 import './index.css';
 
 const propTypes = {
-  onCreateEvent: React.PropTypes.func
+  onCreateEvent: React.PropTypes.func,
+  name: React.PropTypes.string
 };
 
 const defaultProps = {
-  onCreateEvent: (id, pw) => { console.error('onCreateEvent function not defined'); }
+  onCreateEvent: (id, pw) => { console.error('onCreateEvent function not defined'); },
+  name: ''
 };
 
 class Write extends Component {
@@ -22,7 +24,6 @@ class Write extends Component {
     };
   }
 
-
   componentDidMount() {
     $('.modal').modal({
       ready: () => {
@@ -30,6 +31,14 @@ class Write extends Component {
       }
     });
   }
+
+  componentWillReceiveProps(nextProps) {
+    const {name} = nextProps;
+    this.setState({
+      name
+    });
+  }
+
 
   handleCreateEvent = () => {
     const {name, content } = this.state;

@@ -125,3 +125,70 @@ export const likeEventFailure = (error) => {
     error
   }
 };
+
+export const getProfile = (params) => {
+  return (dispatch) => {
+    dispatch(beginGetProfile());
+
+    return service.getProfile(params)
+      .then(response => {
+        console.log('response: ', response.data);
+        dispatch(getProfileSuccess(response.data.name));
+      })
+      .catch(error => {
+        dispatch(getProfileFailure());
+      });
+  }
+};
+
+export const beginGetProfile = () => {
+  return {
+    type: EVENT.EVENT_PROFILE
+  }
+};
+
+export const getProfileSuccess = (name) => {
+  return {
+    type: EVENT.EVENT_PROFILE_SUCCESS,
+    name
+  }
+};
+
+export const getProfileFailure = () => {
+  return {
+    type: EVENT.EVENT_PROFILE_FAILURE
+  }
+};
+
+export const editProfile = (params) => {
+  return (dispatch) => {
+    dispatch(beginEditProfile());
+
+    return service.editProfile(params)
+      .then(response => {
+        dispatch(editProfileSuccess(params.name));
+      })
+      .catch(error => {
+        dispatch(editProfileFailure());
+      });
+  }
+};
+
+export const beginEditProfile = () => {
+  return {
+    type: EVENT.EVENT_EDIT_PROFILE
+  }
+};
+
+export const editProfileSuccess = (name) => {
+  return {
+    type: EVENT.EVENT_EDIT_PROFILE_SUCCESS,
+    name
+  }
+};
+
+export const editProfileFailure = () => {
+  return {
+    type: EVENT.EVENT_EDIT_PROFILE_FAILURE
+  }
+};

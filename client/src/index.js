@@ -43,11 +43,13 @@ ReactDOM.render(
         <Route path="auth/login" component={Signin} />
         <Route path="auth/register" component={Signup} />
         <Route path="events" component={Events} />
-        <Route path="event/:eventId/ask" component={Event} />
-        <Route path="event/:eventId/profile" component={Event} />
+        <Route path="event/:eventId/:ask" component={Event} />
       </Route>
     </Router>
   </Provider>, rootEl);
+
+  //<Route path="event/:eventId/ask" component={Event} />        
+  //<Route path="event/:eventId/profile" component={Event} />
 
 // if (module.hot) {
 //   module.hot.accept('containers/App', () => {

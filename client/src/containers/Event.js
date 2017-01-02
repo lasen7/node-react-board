@@ -22,7 +22,7 @@ class Event extends Component {
     const loadMemoLoop = () => {
       this.loadNewMemo()
         .then(() => {
-          //this.memoLoaderTimeoutId = setTimeout(loadMemoLoop, 10000);
+          this.memoLoaderTimeoutId = setTimeout(loadMemoLoop, 10000);
         })
     };
 
@@ -37,6 +37,7 @@ class Event extends Component {
           }
 
           loadMemoLoop();
+          this.getProfile();
         } else {
           alert.error('Not found event');
           browserHistory.push('/');
@@ -45,8 +46,6 @@ class Event extends Component {
   }
 
   loadNewMemo = () => {
-    console.log('timer');
-
     if (this.props.listStatus.status === 'WAITING') {
       return new Promise((resolve, reject) => {
         resolve();
@@ -58,10 +57,17 @@ class Event extends Component {
       return this.props.actions.listEvent({ eventId: params.eventId });
     }
 
-    //const contentId = this.props.listStatus.data[this.props.listStatus.data.length - 1]._id;
     const contentId = this.props.listStatus.data[0]._id;
 
     return this.props.actions.listNewEvent({ eventId: params.eventId, contentId });
+  }
+
+  getProfile = () => {
+    const eventId = this.props.params.eventId;
+    const key = `${keyPrefix}${eventId}${keySuffix}`;
+    const token = storage.get(key);
+
+    this.props.actions.getProfile({ eventId, token });
   }
 
   componentWillUnmount() {
@@ -77,7 +83,6 @@ class Event extends Component {
     return this.props.actions.createEvent({ name, content, eventId, token })
       .then(() => {
         if (this.props.createStatus.status === 'SUCCESS') {
-          //this.props.actions.listEvent({ eventId: eventId });
           this.loadNewMemo();
           return true;
         } else {
@@ -119,7 +124,7 @@ class Event extends Component {
 
     this.props.actions.likeEvent({ eventId, contentId, token, isLike, index })
       .then(() => {
-        if (this.props.starStatus.status === 'SUCCESS') {
+        if (this.props.likeStatus.status === 'SUCCESS') {
           if (isLike) {
             alert.success('LIKE!');
           } else {
@@ -132,6 +137,17 @@ class Event extends Component {
             location.reload();
           }, 500);
         }
+      });
+  }
+
+  handleEditProfile = (name) => {
+    const eventId = this.props.params.eventId;
+    const key = `${keyPrefix}${eventId}${keySuffix}`;
+    const token = storage.get(key);
+
+    this.props.actions.editProfile({ name, eventId, token })
+      .then(() => {
+        alert.success('edit profile ok');
       });
   }
 
@@ -151,8 +167,13 @@ class Event extends Component {
         onLikeEvent={this.handleLikeEvent}
         data={this.props.listStatus.data}
         token={token}
+        name={this.props.profileStatus.name}
         />);
-    const profileView = (<Profile />);
+    const profileView = (
+      <Profile
+        name={this.props.profileStatus.name}
+        onEditProfile={this.handleEditProfile}
+        />);
 
     return (
       <div>
@@ -169,7 +190,9 @@ Event = connect(state => {
   return {
     createStatus: state.event.create,
     listStatus: state.event.list,
-    starStatus: state.event.star,
+    likeStatus: state.event.like,
+    profileStatus: state.event.profile,
+    editProfileStatus: state.event.editProfile
   }
 }, dispatch => {
   return {
@@ -177,7 +200,9 @@ Event = connect(state => {
       createEvent: event.createEvent,
       listEvent: event.listEvent,
       listNewEvent: event.listNewEvent,
-      likeEvent: event.likeEvent
+      likeEvent: event.likeEvent,
+      getProfile: event.getProfile,
+      editProfile: event.editProfile
     }, dispatch)
   }
 })(Event);

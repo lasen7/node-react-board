@@ -52,3 +52,33 @@ export const likeEvent = ({
     }
   });
 };
+
+export const getProfile = ({
+  eventId,
+  token
+}) => {
+  return request({
+    url: `/api/event/${eventId}/profile`,
+    method: 'get',
+    config: {
+      headers: { 'x-access-token': token }
+    }
+  });
+};
+
+export const editProfile = ({
+  eventId,
+  token,
+  name
+}) => {
+  return request({
+    url: `/api/event/${eventId}/profile`,
+    method: 'put',
+    data: {
+      name
+    },
+    config: {
+      headers: { 'x-access-token': token }
+    }
+  });
+};

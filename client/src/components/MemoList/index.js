@@ -12,11 +12,6 @@ class MemoList extends Component {
   render() {
     let data = this.props.data;
 
-    // sorting
-    data = data.sort((a, b) => {
-      return new Date(b.date) - new Date(a.date);
-    });
-
     // map data to components
     const memoList = data.map(
       (memo, index) => (

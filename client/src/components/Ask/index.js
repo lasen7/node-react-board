@@ -1,23 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Write, MemoList, FloatingButton, Spinner } from 'components';
 
-const Ask = ({onCreateEvent, onLikeEvent, fetching, data, token}) => {
+class Ask extends Component {
 
-  // const spinner = (<Spinner />);
-  const memoList = (
-    <MemoList
-      data={data}
-      onLikeEvent={onLikeEvent}
-      token={token}
-      />);
+  render() {
+    const {onCreateEvent, onLikeEvent, fetching, data, token, name} = this.props;
 
-  return (
-    <div>
-      <Write onCreateEvent={onCreateEvent} />
-      {memoList}
-      <FloatingButton />
-    </div>
-  );
+    const memoList = (
+      <MemoList
+        data={data}
+        onLikeEvent={onLikeEvent}
+        token={token}
+        />);
+
+    return (
+      <div>
+        <Write 
+          name={name}
+          onCreateEvent={onCreateEvent} />
+        {memoList}
+        <FloatingButton />
+      </div>
+    );
+  }
 };
 
 //{fetching ? spinner : memoList}

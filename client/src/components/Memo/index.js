@@ -3,6 +3,11 @@ import './index.css';
 
 class Memo extends Component {
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   let update = JSON.stringify(this.props) !== JSON.stringify(nextProps);
+  //   return update;
+  // }
+
   handleLikeEvent = () => {
     const {data, index, token} = this.props;
     let isLike = (data.like.indexOf(token) > -1) ? false : true;

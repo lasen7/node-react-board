@@ -11,6 +11,16 @@ import alert from 'alertifyjs';
 
 class Signin extends Component {
 
+  componentDidMount() {
+    this.props.actions.getStatus()
+      .then(() => {
+        if (this.props.authStatus.isLoggedIn) {
+          alert.success('Welcome!');
+          browserHistory.push('/events');
+        }
+      });
+  }
+
   handleLogin = (email, password) => {
     this.props.actions.login({ email, password })
       .then(() => {
@@ -38,11 +48,13 @@ class Signin extends Component {
 Signin = connect(state => {
   return {
     status: state.auth.login.status,
+    authStatus: state.auth.status,
   }
 }, dispatch => {
   return {
     actions: bindActionCreators({
-      login: auth.login
+      login: auth.login,
+      getStatus: auth.getStatus,
     }, dispatch)
   }
 })(Signin);

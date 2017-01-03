@@ -3,8 +3,6 @@ import './index.css';
 import { Search, LoginLink } from 'components';
 
 const HomeWrapper = ({isLoggedIn}) => {
-  console.log('HomeWrapper: ', isLoggedIn);
-
   return (
     <div className="HomeWrapper">
       <Search />

@@ -13,7 +13,6 @@ class Home extends Component {
   }
 
   render() {
-    console.log('HOme container ', this.props.status.isLoggedIn);
     return (
       <HomeWrapper isLoggedIn={this.props.status.isLoggedIn} />
     );

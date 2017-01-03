@@ -3,10 +3,20 @@ import './index.css';
 
 class Memo extends Component {
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   let update = JSON.stringify(this.props) !== JSON.stringify(nextProps);
-  //   return update;
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    let current = {
+      ...this.props,
+      index: 0
+    };
+
+    let next = {
+      ...nextProps,
+      index: 0
+    };
+
+    let update = JSON.stringify(current) !== JSON.stringify(next);
+    return update;
+  }
 
   handleLikeEvent = () => {
     const {data, index, token} = this.props;
@@ -15,6 +25,8 @@ class Memo extends Component {
   }
 
   render() {
+    console.log('render memo component');
+
     const {data, token} = this.props;
     let likeStyle = (data.like.indexOf(token) > -1) ? { color: '#ff9980' } : {};
 

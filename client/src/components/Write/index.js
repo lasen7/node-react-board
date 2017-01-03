@@ -72,7 +72,7 @@ class Write extends Component {
     let isChangedName = false;
 
     // Change name
-    if (this.state.name !== '' && this.props.name != this.state.name) {
+    if (this.state.name !== '' && this.props.name !== this.state.name) {
       name = this.state.name;
       isChangedName = true;
     }

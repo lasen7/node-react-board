@@ -1,19 +1,7 @@
 import EVENTS from './ActionTypes/events';
 import * as service from 'services/events';
 
-export const createEvents = (params) => {
-  return (dispatch) => {
-    dispatch(beginCreateEvents());
-
-    return service.createEvents(params)
-      .then(response => {
-        dispatch(createEventsSuccess());
-      })
-      .catch(err => {
-        dispatch(createEventsFailure(err.response.data.code));
-      });
-  }
-};
+/* 이벤트 생성 */
 
 export const beginCreateEvents = () => {
   return {
@@ -34,19 +22,21 @@ export const createEventsFailure = (error) => {
   }
 };
 
-export const listEvents = () => {
+export const createEvents = (params) => {
   return (dispatch) => {
-    dispatch(beginListEvents());
+    dispatch(beginCreateEvents());
 
-    return service.listEvents()
+    return service.createEvents(params)
       .then(response => {
-        dispatch(listEventsSuccess(response.data.events));
+        dispatch(createEventsSuccess());
       })
       .catch(err => {
-        dispatch(listEventsFailure());
+        dispatch(createEventsFailure(err.response.data.code));
       });
   }
 };
+
+/* 이벤트 가져오기 */
 
 export const beginListEvents = () => {
   return {
@@ -67,19 +57,21 @@ export const listEventsFailure = () => {
   }
 };
 
-export const removeEvents = (index, params) => {
+export const listEvents = () => {
   return (dispatch) => {
-    dispatch(beginRemoveEvents());
+    dispatch(beginListEvents());
 
-    return service.removeEvents(params)
+    return service.listEvents()
       .then(response => {
-        dispatch(removeEventsSuccess(index));
+        dispatch(listEventsSuccess(response.data.events));
       })
       .catch(err => {
-        dispatch(removeEventsFailure());
+        dispatch(listEventsFailure());
       });
   }
 };
+
+/* 이벤트 삭제하기 */
 
 export const beginRemoveEvents = () => {
   return {
@@ -97,5 +89,19 @@ export const removeEventsSuccess = (index) => {
 export const removeEventsFailure = () => {
   return {
     type: EVENTS.EVENTS_REMOVE_FAILURE
+  }
+};
+
+export const removeEvents = (index, params) => {
+  return (dispatch) => {
+    dispatch(beginRemoveEvents());
+
+    return service.removeEvents(params)
+      .then(response => {
+        dispatch(removeEventsSuccess(index));
+      })
+      .catch(err => {
+        dispatch(removeEventsFailure());
+      });
   }
 };

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Write, MemoList, FloatingButton, Spinner } from 'components';
+import { Write, MemoList, FloatingButton } from 'components';
 
 class Ask extends Component {
 
@@ -8,7 +8,7 @@ class Ask extends Component {
       onCreateEvent,
       onLikeEvent,
       onEditProfile,
-      fetching,
+      //fetching,
       data,
       token,
       name} = this.props;

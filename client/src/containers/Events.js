@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EventsHeader, EventList, Spinner } from 'components';
+import { EventsHeader, EventList } from 'components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';

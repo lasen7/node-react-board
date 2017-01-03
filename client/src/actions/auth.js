@@ -1,19 +1,7 @@
 import AUTH from './ActionTypes/auth';
 import * as service from 'services/auth';
 
-export const register = (params) => {
-  return (dispatch) => {
-    dispatch(beginRegister());
-
-    return service.register(params)
-      .then(response => {
-        dispatch(registerSuccess());
-      })
-      .catch(error => {
-        dispatch(registerFailure(error.response.data.code));
-      });
-  };
-};
+/* 가입하기 */
 
 export const beginRegister = () => {
   return {
@@ -34,19 +22,21 @@ export const registerFailure = (error) => {
   }
 };
 
-export const login = (params) => {
+export const register = (params) => {
   return (dispatch) => {
-    dispatch(beginLogin());
+    dispatch(beginRegister());
 
-    return service.login(params)
+    return service.register(params)
       .then(response => {
-        dispatch(loginSuccess());
+        dispatch(registerSuccess());
       })
-      .catch(() => {
-        dispatch(loginFailure());
+      .catch(error => {
+        dispatch(registerFailure(error.response.data.code));
       });
-  }
+  };
 };
+
+/* 로그인 하기 */
 
 export const beginLogin = () => {
   return {
@@ -66,19 +56,21 @@ export const loginFailure = () => {
   }
 };
 
-export const getStatus = () => {
+export const login = (params) => {
   return (dispatch) => {
-    dispatch(beginGetStatus());
+    dispatch(beginLogin());
 
-    return service.getStatus()
+    return service.login(params)
       .then(response => {
-        dispatch(getStatusSuccess(response.data.status.name));
+        dispatch(loginSuccess());
       })
       .catch(() => {
-        dispatch(getStatusFailure());
+        dispatch(loginFailure());
       });
   }
 };
+
+/* 세션 정보 확인 */
 
 export const beginGetStatus = () => {
   return {
@@ -99,6 +91,28 @@ export const getStatusFailure = () => {
   }
 };
 
+export const getStatus = () => {
+  return (dispatch) => {
+    dispatch(beginGetStatus());
+
+    return service.getStatus()
+      .then(response => {
+        dispatch(getStatusSuccess(response.data.status.name));
+      })
+      .catch(() => {
+        dispatch(getStatusFailure());
+      });
+  }
+};
+
+/* 로그아웃 */
+
+export const logoutSuccess = () => {
+  return {
+    type: AUTH.AUTH_LOGOUT
+  }
+};
+
 export const logout = () => {
   return (dispatch) => {
     return service.logout()
@@ -107,9 +121,3 @@ export const logout = () => {
       });
   }
 }
-
-export const logoutSuccess = () => {
-  return {
-    type: AUTH.AUTH_LOGOUT
-  }
-};

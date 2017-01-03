@@ -3,20 +3,6 @@ import * as service from 'services/event';
 
 /* 게시판 글 생성 */
 
-export const createEvent = (params) => {
-  return (dispatch) => {
-    dispatch(beginCreateEvent());
-
-    return service.createEvent(params)
-      .then(response => {
-        dispatch(createEventSuccess());
-      })
-      .catch(err => {
-        dispatch(createEventFailure(err.response.data.code));
-      });
-  }
-};
-
 export const beginCreateEvent = () => {
   return {
     type: EVENT.EVENT_CREATE
@@ -36,24 +22,21 @@ export const createEventFailure = (error) => {
   }
 };
 
-/* 게시판 글 읽기 */
-
-export const listEvent = (params) => {
+export const createEvent = (params) => {
   return (dispatch) => {
-    dispatch(beginListEvent());
+    dispatch(beginCreateEvent());
 
-    return service.listEvent(params)
+    return service.createEvent(params)
       .then(response => {
-        dispatch(listEventSuccess(
-          response.data.eventName,
-          response.data.contents,
-          response.data.token));
+        dispatch(createEventSuccess());
       })
       .catch(err => {
-        dispatch(listEventFailure(err.response.data.code));
+        dispatch(createEventFailure(err.response.data.code));
       });
   }
 };
+
+/* 게시판 글 읽기 */
 
 export const beginListEvent = () => {
   return {
@@ -77,24 +60,24 @@ export const listEventFailure = (error) => {
   }
 };
 
-/* 게시판 새 글 읽기 */
-
-export const listNewEvent = (params) => {
+export const listEvent = (params) => {
   return (dispatch) => {
-    dispatch(beginListNewEvent());
+    dispatch(beginListEvent());
 
-    return service.listNewEvent(params)
+    return service.listEvent(params)
       .then(response => {
-        dispatch(listNewEventSuccess(
+        dispatch(listEventSuccess(
           response.data.eventName,
           response.data.contents,
           response.data.token));
       })
-      .catch(error => {
-        dispatch(listNewEventFailure());
+      .catch(err => {
+        dispatch(listEventFailure(err.response.data.code));
       });
   }
 };
+
+/* 게시판 새 글 읽기 */
 
 export const beginListNewEvent = () => {
   return {
@@ -117,21 +100,24 @@ export const listNewEventFailure = () => {
   }
 };
 
-/* 게시판 글 좋아요 */
-
-export const likeEvent = (params) => {
+export const listNewEvent = (params) => {
   return (dispatch) => {
-    dispatch(beginLikeEvent());
+    dispatch(beginListNewEvent());
 
-    return service.likeEvent(params)
+    return service.listNewEvent(params)
       .then(response => {
-        dispatch(likeEventSuccess(params.token, params.isLike, params.index));
+        dispatch(listNewEventSuccess(
+          response.data.eventName,
+          response.data.contents,
+          response.data.token));
       })
       .catch(error => {
-        dispatch(likeEventFailure(error.response.data.code));
+        dispatch(listNewEventFailure());
       });
   }
 };
+
+/* 게시판 글 좋아요 */
 
 export const beginLikeEvent = () => {
   return {
@@ -155,21 +141,21 @@ export const likeEventFailure = (error) => {
   }
 };
 
-/* 게시판 프로필 정보 얻기 */
-
-export const getProfile = (params) => {
+export const likeEvent = (params) => {
   return (dispatch) => {
-    dispatch(beginGetProfile());
+    dispatch(beginLikeEvent());
 
-    return service.getProfile(params)
+    return service.likeEvent(params)
       .then(response => {
-        dispatch(getProfileSuccess(response.data.name));
+        dispatch(likeEventSuccess(params.token, params.isLike, params.index));
       })
       .catch(error => {
-        dispatch(getProfileFailure());
+        dispatch(likeEventFailure(error.response.data.code));
       });
   }
 };
+
+/* 게시판 프로필 정보 얻기 */
 
 export const beginGetProfile = () => {
   return {
@@ -190,21 +176,21 @@ export const getProfileFailure = () => {
   }
 };
 
-/* 게시판 프로필 수정 */
-
-export const editProfile = (params) => {
+export const getProfile = (params) => {
   return (dispatch) => {
-    dispatch(beginEditProfile());
+    dispatch(beginGetProfile());
 
-    return service.editProfile(params)
+    return service.getProfile(params)
       .then(response => {
-        dispatch(editProfileSuccess(response.data.data, params.name));
+        dispatch(getProfileSuccess(response.data.name));
       })
       .catch(error => {
-        dispatch(editProfileFailure());
+        dispatch(getProfileFailure());
       });
   }
 };
+
+/* 게시판 프로필 수정 */
 
 export const beginEditProfile = () => {
   return {
@@ -223,5 +209,19 @@ export const editProfileSuccess = (data, name) => {
 export const editProfileFailure = () => {
   return {
     type: EVENT.EVENT_EDIT_PROFILE_FAILURE
+  }
+};
+
+export const editProfile = (params) => {
+  return (dispatch) => {
+    dispatch(beginEditProfile());
+
+    return service.editProfile(params)
+      .then(response => {
+        dispatch(editProfileSuccess(response.data.data, params.name));
+      })
+      .catch(error => {
+        dispatch(editProfileFailure());
+      });
   }
 };

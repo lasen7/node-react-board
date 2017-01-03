@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App, Signin, Signup, Event, Events, Home } from 'containers';
+import { App, Signin, Signup, Event, Events, Home, NotFound } from 'containers';
 
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
-import { AppContainer } from 'react-hot-loader';
+//import { AppContainer } from 'react-hot-loader';
 
 import { Provider } from 'react-redux';
 
@@ -44,6 +44,7 @@ ReactDOM.render(
         <Route path="auth/register" component={Signup} />
         <Route path="events" component={Events} />
         <Route path="event/:eventId/:ask" component={Event} />
+        <Route path="*" component={NotFound} />
       </Route>
     </Router>
   </Provider>, rootEl);

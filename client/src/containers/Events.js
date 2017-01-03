@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EventsHeader, EventList } from 'components';
+import { EventsHeader, EventList, Spinner } from 'components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -12,6 +12,14 @@ import alert from 'alertifyjs';
 
 class Events extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      initialLoading: false
+    }
+  }
+
   componentDidMount() {
     this.props.actions.getStatus()
       .then(() => {
@@ -19,7 +27,12 @@ class Events extends Component {
           alert.success('Please login!');
           browserHistory.push('/auth/login');
         } else {
-          this.props.actions.listEvents();
+          this.props.actions.listEvents()
+            .then(() => {
+              this.setState({
+                initialLoading: true
+              });
+            });
         }
       });
   }
@@ -66,8 +79,6 @@ class Events extends Component {
   }
 
   render() {
-
-    //const spinner = (<Spinner />);
     const eventList = (
       <EventList
         onCreateEvents={this.handleCreateEvents}
@@ -76,13 +87,16 @@ class Events extends Component {
         />
     );
 
+    const spinner = (<Spinner />);
+
     return (
       <div>
         <EventsHeader
           name={this.props.status.name}
           onLogout={this.handleLogout}
           />
-        {eventList}
+        {(this.props.listStatus.status === 'WAITING' && !this.state.initialLoading)
+          ? spinner : eventList}
       </div>
     );
   }

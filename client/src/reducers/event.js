@@ -65,12 +65,7 @@ function event(state = initialState, action) {
       }
     case EVENT.EVENT_LIST_NEW:
       return {
-        ...state,
-        list: {
-          ...state.list,
-          status: 'WAITING',
-          error: -1
-        }
+        ...state
       }
     case EVENT.EVENT_LIST_SUCCESS:
     case EVENT.EVENT_LIST_NEW_SUCCESS:

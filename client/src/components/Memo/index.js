@@ -25,8 +25,6 @@ class Memo extends Component {
   }
 
   render() {
-    console.log('render memo component');
-
     const {data, token} = this.props;
     let likeStyle = (data.like.indexOf(token) > -1) ? { color: '#ff9980' } : {};
 

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Write, MemoList, FloatingButton } from 'components';
+import {
+  Write,
+  MemoList,
+  FloatingButton,
+} from 'components';
 
 class Ask extends Component {
 
@@ -8,7 +12,6 @@ class Ask extends Component {
       onCreateEvent,
       onLikeEvent,
       onEditProfile,
-      //fetching,
       data,
       token,
       name} = this.props;
@@ -32,7 +35,5 @@ class Ask extends Component {
     );
   }
 };
-
-//{fetching ? spinner : memoList}
 
 export default Ask;

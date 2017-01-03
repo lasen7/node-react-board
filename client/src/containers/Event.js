@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EventHeader, Ask, Profile } from 'components';
+import { EventHeader, Ask, Profile, Spinner } from 'components';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -15,6 +15,13 @@ const keyPrefix = 'Board.';
 const keySuffix = '.Auth.Token';
 
 class Event extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      initialLoading: false
+    }
+  }
 
   componentDidMount() {
     const {params} = this.props;
@@ -23,6 +30,12 @@ class Event extends Component {
       this.loadNewMemo()
         .then(() => {
           this.memoLoaderTimeoutId = setTimeout(loadMemoLoop, 5000);
+
+          if (!this.state.initialLoading) {
+            this.setState({
+              initialLoading: true
+            });
+          }
         })
     };
 
@@ -35,6 +48,10 @@ class Event extends Component {
           if (!token) {
             storage.set(key, this.props.listStatus.token);
           }
+
+          this.setState({
+            initialLoading: true
+          });
 
           loadMemoLoop();
           this.getProfile();
@@ -54,7 +71,7 @@ class Event extends Component {
     const {params} = this.props;
 
     if (this.props.listStatus.data.length === 0) {
-      return this.props.actions.listEvent({ eventId: params.eventId });
+      return this.props.actions.listEvent({ eventId: params.eventId })
     }
 
     const contentId = this.props.listStatus.data[0]._id;
@@ -72,8 +89,6 @@ class Event extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.memoLoaderTimeoutId);
-
-    //this.props.listStatus.data = [];
   }
 
   handleCreateEvent = (name, content) => {
@@ -169,7 +184,6 @@ class Event extends Component {
 
     const askView = (
       <Ask
-        fetching={this.props.listStatus.status === 'WAITING'}
         onCreateEvent={this.handleCreateEvent}
         onLikeEvent={this.handleLikeEvent}
         data={this.props.listStatus.data}
@@ -182,13 +196,14 @@ class Event extends Component {
         name={this.props.profileStatus.name}
         onEditProfile={this.handleEditProfile}
         />);
+    const spinner = (<Spinner />);
 
     return (
       <div>
         <EventHeader
           eventName={this.props.listStatus.eventName}
           eventId={params.eventId} />
-        {isAsk ? askView : profileView}
+        {!isAsk ? profileView : (this.props.listStatus.status === 'WAITING' && !this.state.initialLoading ? spinner : askView)}
       </div>
     );
   }

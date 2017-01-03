@@ -56,6 +56,11 @@ app.use('/api', api);
 //   res.status(404).send('Not found page');
 // });
 
+/* support client-side routing */
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../client/build/index.html'));
+});
+
 // handle error
 app.use((err, req, res, next) => {
   console.error(err.stack);

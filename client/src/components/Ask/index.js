@@ -4,7 +4,14 @@ import { Write, MemoList, FloatingButton, Spinner } from 'components';
 class Ask extends Component {
 
   render() {
-    const {onCreateEvent, onLikeEvent, fetching, data, token, name} = this.props;
+    const {
+      onCreateEvent,
+      onLikeEvent,
+      onEditProfile,
+      fetching,
+      data,
+      token,
+      name} = this.props;
 
     const memoList = (
       <MemoList
@@ -15,9 +22,10 @@ class Ask extends Component {
 
     return (
       <div>
-        <Write 
+        <Write
           name={name}
-          onCreateEvent={onCreateEvent} />
+          onCreateEvent={onCreateEvent}
+          onEditProfile={onEditProfile} />
         {memoList}
         <FloatingButton />
       </div>

@@ -5,11 +5,13 @@ import './index.css';
 
 const propTypes = {
   onCreateEvent: React.PropTypes.func,
+  onEditProfile: React.PropTypes.func,
   name: React.PropTypes.string
 };
 
 const defaultProps = {
   onCreateEvent: (id, pw) => { console.error('onCreateEvent function not defined'); },
+  onEditProfile: (id, pw) => { console.error('onEditProfile function not defined'); },
   name: ''
 };
 
@@ -19,7 +21,7 @@ class Write extends Component {
     super(props);
 
     this.state = {
-      name: '',
+      name: props.name,
       content: ''
     };
   }
@@ -28,33 +30,74 @@ class Write extends Component {
     $('.modal').modal({
       ready: () => {
         this.contentInput.focus();
+      },
+      complete: () => {
+        this.setState({
+          name: this.props.name
+        });
       }
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const {name} = nextProps;
-    this.setState({
-      name
-    });
+    if (nextProps.name !== this.props.name) {
+      this.setState({
+        name: nextProps.name
+      });
+    }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    let current = {
+      props: this.props,
+      state: this.state
+    };
+
+    let next = {
+      props: nextProps,
+      state: nextState
+    };
+
+    let update = JSON.stringify(current) !== JSON.stringify(next);
+    return update;
+  }
+
+  handleEditProfile = (name) => {
+    this.props.onEditProfile(name);
+  }
 
   handleCreateEvent = () => {
-    const {name, content } = this.state;
+    let {content } = this.state;
+    let name = this.props.name || '';
+    let isChangedName = false;
+
+    // Change name
+    if (this.state.name !== '' && this.props.name != this.state.name) {
+      name = this.state.name;
+      isChangedName = true;
+    }
 
     this.props.onCreateEvent(name, content)
       .then(result => {
         if (!result) {
           this.contentInput.focus();
+          return false
         } else {
           this.setState({
             name: '',
             content: ''
           });
           $('#modal1').modal('close');
+          return true;
         }
       })
+      .then(result => {
+        console.log('write oncrate event then: ', result);
+        if (result && isChangedName) {
+          // Change name
+          this.handleEditProfile(name);
+        }
+      });
   }
 
   handleChange = (e) => {

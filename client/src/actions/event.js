@@ -132,7 +132,6 @@ export const getProfile = (params) => {
 
     return service.getProfile(params)
       .then(response => {
-        console.log('response: ', response.data);
         dispatch(getProfileSuccess(response.data.name));
       })
       .catch(error => {
@@ -166,7 +165,7 @@ export const editProfile = (params) => {
 
     return service.editProfile(params)
       .then(response => {
-        dispatch(editProfileSuccess(params.name));
+        dispatch(editProfileSuccess(response.data.data, params.name));
       })
       .catch(error => {
         dispatch(editProfileFailure());
@@ -180,9 +179,10 @@ export const beginEditProfile = () => {
   }
 };
 
-export const editProfileSuccess = (name) => {
+export const editProfileSuccess = (data, name) => {
   return {
     type: EVENT.EVENT_EDIT_PROFILE_SUCCESS,
+    data,
     name
   }
 };

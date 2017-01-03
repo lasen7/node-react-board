@@ -19,15 +19,15 @@ class Profile extends Component {
 
   handleSave = () => {
     const name = this.state.name;
-
     this.props.onEditProfile(name);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {name} = nextProps;
-    this.setState({
-      name
-    });
+    if (nextProps.name !== this.props.name) {
+      this.setState({
+        name: nextProps.name
+      });
+    }
   }
 
   render() {

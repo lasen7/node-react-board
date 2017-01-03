@@ -178,6 +178,25 @@ function event(state = initialState, action) {
         }
       }
     case EVENT.EVENT_EDIT_PROFILE_SUCCESS:
+      // action.data: array(_id, writer)
+      // update list data
+      var updateData = state.list.data.map((item) => {
+        //console.log('reducer edit profile success: ', item);
+        //if(item._id === action.d)
+
+        let findItem = action.data.find(o => o._id === item._id);
+        if (findItem) {
+          return {
+            ...item,
+            writer: findItem.writer
+          }
+        } else {
+          return {
+            ...item
+          }
+        }
+      });
+
       return {
         ...state,
         editProfile: {
@@ -187,6 +206,9 @@ function event(state = initialState, action) {
         profile: {
           ...state.profile,
           name: action.name
+        },
+        list: {
+          data: updateData
         }
       }
     case EVENT.EVENT_EDIT_PROFILE_FAILURE:

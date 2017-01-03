@@ -141,13 +141,18 @@ class Event extends Component {
   }
 
   handleEditProfile = (name) => {
+    if (!name) {
+      alert.error('Please input name!');
+      return;
+    }
+
     const eventId = this.props.params.eventId;
     const key = `${keyPrefix}${eventId}${keySuffix}`;
     const token = storage.get(key);
 
-    this.props.actions.editProfile({ name, eventId, token })
+    return this.props.actions.editProfile({ name, eventId, token })
       .then(() => {
-        alert.success('edit profile ok');
+        alert.success('Edit profile name!');
       });
   }
 
@@ -168,6 +173,7 @@ class Event extends Component {
         data={this.props.listStatus.data}
         token={token}
         name={this.props.profileStatus.name}
+        onEditProfile={this.handleEditProfile}
         />);
     const profileView = (
       <Profile

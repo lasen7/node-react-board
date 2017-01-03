@@ -1,6 +1,8 @@
 import EVENT from './ActionTypes/event';
 import * as service from 'services/event';
 
+/* 게시판 글 생성 */
+
 export const createEvent = (params) => {
   return (dispatch) => {
     dispatch(beginCreateEvent());
@@ -33,6 +35,8 @@ export const createEventFailure = (error) => {
     error
   }
 };
+
+/* 게시판 글 읽기 */
 
 export const listEvent = (params) => {
   return (dispatch) => {
@@ -73,22 +77,47 @@ export const listEventFailure = (error) => {
   }
 };
 
+/* 게시판 새 글 읽기 */
+
 export const listNewEvent = (params) => {
   return (dispatch) => {
-    dispatch(beginListEvent());
+    dispatch(beginListNewEvent());
 
     return service.listNewEvent(params)
       .then(response => {
-        dispatch(listEventSuccess(
+        dispatch(listNewEventSuccess(
           response.data.eventName,
           response.data.contents,
           response.data.token));
       })
       .catch(error => {
-        dispatch(listEventFailure());
+        dispatch(listNewEventFailure());
       });
   }
 };
+
+export const beginListNewEvent = () => {
+  return {
+    type: EVENT.EVENT_LIST_NEW
+  }
+};
+
+export const listNewEventSuccess = (eventName, data, token) => {
+  return {
+    type: EVENT.EVENT_LIST_NEW_SUCCESS,
+    eventName,
+    data,
+    token
+  }
+};
+
+export const listNewEventFailure = () => {
+  return {
+    type: EVENT.EVENT_LIST_NEW_FAILURE
+  }
+};
+
+/* 게시판 글 좋아요 */
 
 export const likeEvent = (params) => {
   return (dispatch) => {
@@ -126,6 +155,8 @@ export const likeEventFailure = (error) => {
   }
 };
 
+/* 게시판 프로필 정보 얻기 */
+
 export const getProfile = (params) => {
   return (dispatch) => {
     dispatch(beginGetProfile());
@@ -158,6 +189,8 @@ export const getProfileFailure = () => {
     type: EVENT.EVENT_PROFILE_FAILURE
   }
 };
+
+/* 게시판 프로필 수정 */
 
 export const editProfile = (params) => {
   return (dispatch) => {

@@ -3,6 +3,8 @@
 import React, { Component } from 'react';
 import './Event.css';
 
+import { browserHistory } from 'react-router';
+
 const propTypes = {
   data: React.PropTypes.object,
   onRemoveEvents: React.PropTypes.func,
@@ -20,6 +22,11 @@ class Event extends Component {
 
   componentDidMount() {
     $(".dropdown-button").dropdown();
+  }
+
+  handleOpen = () => {
+    const {eventId} = this.props.data;
+    browserHistory.push(`/event/${eventId}/ask`);
   }
 
   handleRemove = () => {
@@ -42,6 +49,7 @@ class Event extends Component {
               <div className="Right">
                 <a className='dropdown-button' href='#' data-beloworigin="true" data-activates={`dropdown-${eventId}`}><i className="material-icons">menu</i></a>
                 <ul id={`dropdown-${eventId}`} className='dropdown-content'>
+                  <li><a onClick={this.handleOpen}>Open</a></li>
                   <li><a onClick={this.handleRemove}>Delete</a></li>
                 </ul>
               </div>

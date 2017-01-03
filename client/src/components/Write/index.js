@@ -92,7 +92,6 @@ class Write extends Component {
         }
       })
       .then(result => {
-        console.log('write oncrate event then: ', result);
         if (result && isChangedName) {
           // Change name
           this.handleEditProfile(name);

@@ -22,7 +22,7 @@ class Event extends Component {
     const loadMemoLoop = () => {
       this.loadNewMemo()
         .then(() => {
-          this.memoLoaderTimeoutId = setTimeout(loadMemoLoop, 10000);
+          this.memoLoaderTimeoutId = setTimeout(loadMemoLoop, 5000);
         })
     };
 
@@ -72,6 +72,8 @@ class Event extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.memoLoaderTimeoutId);
+
+    //this.props.listStatus.data = [];
   }
 
   handleCreateEvent = (name, content) => {

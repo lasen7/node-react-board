@@ -36,7 +36,6 @@ class EventsHeader extends Component {
             <div>
               <span className="Header-logo">My events</span>
               <ul className="right">
-                <li><a href="#"><i className="material-icons">search</i></a></li>
                 <li><a className="dropdown-button" href="#!" data-beloworigin="true" data-activates="dropdown1">{this.props.name}<i className="material-icons right">arrow_drop_down</i></a></li>
               </ul>
             </div>
@@ -63,3 +62,6 @@ EventsHeader.propTypes = propTypes;
 EventsHeader.defaultProps = defaultProps;
 
 export default EventsHeader;
+
+
+// <li><a href="#"><i className="material-icons">search</i></a></li>

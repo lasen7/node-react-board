@@ -59,10 +59,21 @@ function event(state = initialState, action) {
         list: {
           ...state.list,
           status: 'WAITING',
+          error: -1,
+          data: []
+        }
+      }
+    case EVENT.EVENT_LIST_NEW:
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          status: 'WAITING',
           error: -1
         }
       }
     case EVENT.EVENT_LIST_SUCCESS:
+    case EVENT.EVENT_LIST_NEW_SUCCESS:
       let data = [
         ...state.list.data,
         ...action.data
@@ -84,6 +95,7 @@ function event(state = initialState, action) {
         }
       }
     case EVENT.EVENT_LIST_FAILURE:
+    case EVENT.EVENT_LIST_NEW_FAILURE:
       return {
         ...state,
         list: {
@@ -128,6 +140,7 @@ function event(state = initialState, action) {
           status: 'SUCCESS',
         },
         list: {
+          ...state.list,
           data: [
             ...state.list.data.slice(0, action.index),
             copyData,
@@ -178,12 +191,7 @@ function event(state = initialState, action) {
         }
       }
     case EVENT.EVENT_EDIT_PROFILE_SUCCESS:
-      // action.data: array(_id, writer)
-      // update list data
       var updateData = state.list.data.map((item) => {
-        //console.log('reducer edit profile success: ', item);
-        //if(item._id === action.d)
-
         let findItem = action.data.find(o => o._id === item._id);
         if (findItem) {
           return {
@@ -208,6 +216,7 @@ function event(state = initialState, action) {
           name: action.name
         },
         list: {
+          ...state.list,
           data: updateData
         }
       }

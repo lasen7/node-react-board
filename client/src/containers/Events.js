@@ -67,7 +67,7 @@ class Events extends Component {
 
   render() {
 
-    const spinner = (<Spinner />);
+    //const spinner = (<Spinner />);
     const eventList = (
       <EventList
         onCreateEvents={this.handleCreateEvents}
@@ -82,7 +82,7 @@ class Events extends Component {
           name={this.props.status.name}
           onLogout={this.handleLogout}
           />
-        {this.props.listStatus.status === 'WAITING' ? spinner : eventList}
+        {eventList}
       </div>
     );
   }

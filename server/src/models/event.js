@@ -101,7 +101,7 @@ Event.statics.getNewContents = function (eventId, contentId) {
   return this.aggregate([
     { $match: { eventId: eventId } },
     { $unwind: '$contents' },
-    { $match: { 'contents._id': { $gt: contentId } } },
+    { $match: { 'contents._id': { $gte: contentId } } },
     { $project: { 'contents': 1, eventName: 1, _id: 0 } }
   ]).exec();
 };
@@ -117,21 +117,51 @@ Event.statics.likeContent = function (eventId, contentId, token, isLike) {
     .exec();
 };
 
-Event.statics.editWriter = function (eventId, name) {
-  return this.findOne({ eventId: eventId })
-    .exec((err, doc) => {
-      if (!doc) {
-        return Promise.resolve();
-      }
-
-      for (let content of doc.contents) {
-        if (content.writer !== '') {
-          content.writer = name;
+Event.statics.editWriter = function (eventId, name, token) {
+  return new Promise((resolve, reject) => {
+    this.findOne({ eventId: eventId })
+      .exec((err, doc) => {
+        if (!doc) {
+          return resolve();
         }
-      }
 
-      return doc.save();
-    });
+        let updated = [];
+
+        for (let content of doc.contents) {
+          if (content.writer !== '' && content.token === token) {
+            content.writer = name;
+            updated.push({
+              _id: content._id,
+              writer: content.writer
+            });
+          }
+        }
+
+        doc.save((err, result) => {
+          if (err) {
+            return reject(err);
+          }
+
+          return resolve(updated);
+        });
+      });
+  });
+
+
+  // return this.findOne({ eventId: eventId })
+  //   .exec((err, doc) => {
+  //     if (!doc) {
+  //       return Promise.resolve();
+  //     }
+
+  //     for (let content of doc.contents) {
+  //       if (content.writer !== '' && content.token === token) {
+  //         content.writer = name;
+  //       }
+  //     }
+
+  //     return doc.save();
+  //   });
 };
 
 export default mongoose.model('Event', Event);

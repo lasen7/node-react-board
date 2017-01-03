@@ -110,7 +110,7 @@ export const getNewContent = (req, res, next) => {
 
   Event.getNewContents(req.params.eventId, req.params.contentId)
     .then(docs => {
-      if (!docs || docs.length === 0) {
+      if (!docs) {
         return res.status(403).send({
           msg: 'Not found event',
           code: 1
@@ -122,12 +122,20 @@ export const getNewContent = (req, res, next) => {
       result.eventName = docs[0].eventName;
       result.contents = [];
 
-      for (let doc of docs) {
-        result.contents.push(doc.contents);
-      }
+      if (docs.length === 1) {
+        result.token = req.token;
+        return res.send(result);
+      } else {
+        // for (let doc of docs) {
+        //   result.contents.push(doc.contents);
+        // }
+        for (let i = 1; i < docs.length; i++) {
+          result.contents.push(docs[i].contents);
+        }
 
-      result.token = req.token;
-      res.send(result);
+        result.token = req.token;
+        res.send(result);
+      }
     })
     .catch(error => {
       return next(error);
@@ -209,20 +217,46 @@ export const editProfile = (req, res, next) => {
     });
   }
 
-  Profile.editProfile(req.params.eventId, req.body.name, req.token)
-    .then(result => {
-      return Event.editWriter(req.params.eventId, req.body.name);
-    })
-    .then(result => {
-      if (!result) {
-        return res.status(400).send({ msg: 'Not found event' });
-      }
+  // Promise.all([
+  //   Profile.editProfile(req.params.eventId, req.body.name, req.token),
+  //   Event.editWriter(req.params.eventId, req.body.name, req.token)
+  // ]).then(result => {
+  //   res.send(result);
+  // }).catch(err => {
+  //   return next(error);
+  // });
 
-      res.send({ msg: 'Success' });
+  Event.editWriter(req.params.eventId, req.body.name, req.token)
+    .then(result => {
+      return result;
     })
-    .catch(error => {
-      return next(error);
+    .then(result => {
+      Profile.editProfile(req.params.eventId, req.body.name, req.token);
+      res.send({
+        msg: 'Success',
+        data: result
+      });
+    })
+    .catch(err => {
+      return next(err);
     });
+
+  // Profile.editProfile(req.params.eventId, req.body.name, req.token)
+  //   .then(result => {
+  //     return Event.editWriter(req.params.eventId, req.body.name, req.token);
+  //   })
+  //   .then(result => {
+  //     if (!result) {
+  //       return res.status(400).send({ msg: 'Not found event' });
+  //     }
+
+  //     console.log('result: ', result);
+
+  //     res.send({ msg: 'Success' });
+  //   })
+  //   .catch(error => {
+  //     return next(error);
+  //   });
 };
 
 /**
